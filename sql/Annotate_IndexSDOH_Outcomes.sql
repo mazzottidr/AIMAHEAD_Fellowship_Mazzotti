@@ -1,0 +1,1792 @@
+-- Annotate S19.dbo.Pat_OSA_INS_Index_Included_Demo_SDOH with Specific Phenotypes
+
+
+select top 100 * from S19.dbo.Pat_OSA_INS_Index_Included_Demo_SDOH;
+
+/*outcome identification*/
+with mace_event as (
+    select o.PATIENT_NUM
+          ,'CAD' as Outcome
+          ,o.START_DATE as Outcome_Date
+    from FellowsSample.S19.OBSERVATION_FACT o
+	where CONCEPT_CD IN ('ICD10CM:I25',
+							'ICD10CM:I25.1',
+							'ICD10CM:I25.10',
+							'ICD10CM:I25.11',
+							'ICD10CM:I25.110',
+							'ICD10CM:I25.111',
+							'ICD10CM:I25.118',
+							'ICD10CM:I25.119',
+							'ICD10CM:I25.2',
+							'ICD10CM:I25.3',
+							'ICD10CM:I25.41',
+							'ICD10CM:I25.42',
+							'ICD10CM:I25.5',
+							'ICD10CM:I25.6',
+							'ICD10CM:I25.70',
+							'ICD10CM:I25.700',
+							'ICD10CM:I25.701',
+							'ICD10CM:I25.708',
+							'ICD10CM:I25.709',
+							'ICD10CM:I25.71',
+							'ICD10CM:I25.710',
+							'ICD10CM:I25.711',
+							'ICD10CM:I25.718',
+							'ICD10CM:I25.719',
+							'ICD10CM:I25.72',
+							'ICD10CM:I25.720',
+							'ICD10CM:I25.721',
+							'ICD10CM:I25.728',
+							'ICD10CM:I25.729',
+							'ICD10CM:I25.730',
+							'ICD10CM:I25.731',
+							'ICD10CM:I25.738',
+							'ICD10CM:I25.739',
+							'ICD10CM:I25.758',
+							'ICD10CM:I25.759',
+							'ICD10CM:I25.760',
+							'ICD10CM:I25.761',
+							'ICD10CM:I25.768',
+							'ICD10CM:I25.769',
+							'ICD10CM:I25.79',
+							'ICD10CM:I25.790',
+							'ICD10CM:I25.791',
+							'ICD10CM:I25.798',
+							'ICD10CM:I25.799',
+							'ICD10CM:I25.8',
+							'ICD10CM:I25.81',
+							'ICD10CM:I25.810',
+							'ICD10CM:I25.811',
+							'ICD10CM:I25.812',
+							'ICD10CM:I25.82',
+							'ICD10CM:I25.83',
+							'ICD10CM:I25.84',
+							'ICD10CM:I25.89',
+							'ICD10CM:I25.9',
+							'ICD9CM:411.0',
+							'ICD9CM:411.1',
+							'ICD9CM:411.89',
+							'ICD9CM:414',
+							'ICD9CM:414.0',
+							'ICD9CM:414.00',
+							'ICD9CM:414.01',
+							'ICD9CM:414.02',
+							'ICD9CM:414.03',
+							'ICD9CM:414.04',
+							'ICD9CM:414.05',
+							'ICD9CM:414.06',
+							'ICD9CM:414.07',
+							'ICD9CM:414.1',
+							'ICD9CM:414.10',
+							'ICD9CM:414.11',
+							'ICD9CM:414.12',
+							'ICD9CM:414.19',
+							'ICD9CM:414.2',
+							'ICD9CM:414.3',
+							'ICD9CM:414.4',
+							'ICD9CM:414.8',
+							'ICD9CM:414.9')
+    
+	union
+    select o.PATIENT_NUM
+          ,'CerebroVD' as Outcome
+          ,o.START_DATE as Outcome_Date
+    from FellowsSample.S19.OBSERVATION_FACT o
+	where CONCEPT_CD IN ('ICD10CM:I60',
+							'ICD10CM:I60.00',
+							'ICD10CM:I60.01',
+							'ICD10CM:I60.10',
+							'ICD10CM:I60.11',
+							'ICD10CM:I60.12',
+							'ICD10CM:I60.2',
+							'ICD10CM:I60.22',
+							'ICD10CM:I60.3',
+							'ICD10CM:I60.30',
+							'ICD10CM:I60.31',
+							'ICD10CM:I60.32',
+							'ICD10CM:I60.4',
+							'ICD10CM:I60.51',
+							'ICD10CM:I60.6',
+							'ICD10CM:I60.7',
+							'ICD10CM:I60.8',
+							'ICD10CM:I60.9',
+							'ICD10CM:I61',
+							'ICD10CM:I61.0',
+							'ICD10CM:I61.1',
+							'ICD10CM:I61.2',
+							'ICD10CM:I61.3',
+							'ICD10CM:I61.4',
+							'ICD10CM:I61.5',
+							'ICD10CM:I61.6',
+							'ICD10CM:I61.8',
+							'ICD10CM:I61.9',
+							'ICD10CM:I62',
+							'ICD10CM:I62.0',
+							'ICD10CM:I62.00',
+							'ICD10CM:I62.01',
+							'ICD10CM:I62.02',
+							'ICD10CM:I62.03',
+							'ICD10CM:I62.1',
+							'ICD10CM:I62.9',
+							'ICD10CM:I63',
+							'ICD10CM:I63.00',
+							'ICD10CM:I63.011',
+							'ICD10CM:I63.012',
+							'ICD10CM:I63.013',
+							'ICD10CM:I63.019',
+							'ICD10CM:I63.02',
+							'ICD10CM:I63.03',
+							'ICD10CM:I63.031',
+							'ICD10CM:I63.032',
+							'ICD10CM:I63.033',
+							'ICD10CM:I63.039',
+							'ICD10CM:I63.09',
+							'ICD10CM:I63.10',
+							'ICD10CM:I63.111',
+							'ICD10CM:I63.112',
+							'ICD10CM:I63.113',
+							'ICD10CM:I63.119',
+							'ICD10CM:I63.12',
+							'ICD10CM:I63.13',
+							'ICD10CM:I63.131',
+							'ICD10CM:I63.132',
+							'ICD10CM:I63.133',
+							'ICD10CM:I63.139',
+							'ICD10CM:I63.19',
+							'ICD10CM:I63.2',
+							'ICD10CM:I63.20',
+							'ICD10CM:I63.211',
+							'ICD10CM:I63.212',
+							'ICD10CM:I63.213',
+							'ICD10CM:I63.219',
+							'ICD10CM:I63.22',
+							'ICD10CM:I63.23',
+							'ICD10CM:I63.231',
+							'ICD10CM:I63.232',
+							'ICD10CM:I63.233',
+							'ICD10CM:I63.239',
+							'ICD10CM:I63.29',
+							'ICD10CM:I63.30',
+							'ICD10CM:I63.311',
+							'ICD10CM:I63.312',
+							'ICD10CM:I63.313',
+							'ICD10CM:I63.319',
+							'ICD10CM:I63.321',
+							'ICD10CM:I63.322',
+							'ICD10CM:I63.323',
+							'ICD10CM:I63.329',
+							'ICD10CM:I63.331',
+							'ICD10CM:I63.332',
+							'ICD10CM:I63.333',
+							'ICD10CM:I63.339',
+							'ICD10CM:I63.341',
+							'ICD10CM:I63.342',
+							'ICD10CM:I63.343',
+							'ICD10CM:I63.349',
+							'ICD10CM:I63.39',
+							'ICD10CM:I63.4',
+							'ICD10CM:I63.40',
+							'ICD10CM:I63.411',
+							'ICD10CM:I63.412',
+							'ICD10CM:I63.413',
+							'ICD10CM:I63.419',
+							'ICD10CM:I63.421',
+							'ICD10CM:I63.422',
+							'ICD10CM:I63.423',
+							'ICD10CM:I63.429',
+							'ICD10CM:I63.431',
+							'ICD10CM:I63.432',
+							'ICD10CM:I63.433',
+							'ICD10CM:I63.439',
+							'ICD10CM:I63.441',
+							'ICD10CM:I63.442',
+							'ICD10CM:I63.443',
+							'ICD10CM:I63.449',
+							'ICD10CM:I63.49',
+							'ICD10CM:I63.5',
+							'ICD10CM:I63.50',
+							'ICD10CM:I63.511',
+							'ICD10CM:I63.512',
+							'ICD10CM:I63.513',
+							'ICD10CM:I63.519',
+							'ICD10CM:I63.521',
+							'ICD10CM:I63.522',
+							'ICD10CM:I63.529',
+							'ICD10CM:I63.531',
+							'ICD10CM:I63.532',
+							'ICD10CM:I63.533',
+							'ICD10CM:I63.539',
+							'ICD10CM:I63.541',
+							'ICD10CM:I63.542',
+							'ICD10CM:I63.543',
+							'ICD10CM:I63.549',
+							'ICD10CM:I63.59',
+							'ICD10CM:I63.6',
+							'ICD10CM:I63.8',
+							'ICD10CM:I63.81',
+							'ICD10CM:I63.89',
+							'ICD10CM:I63.9',
+							'ICD10CM:I65',
+							'ICD10CM:I65.0',
+							'ICD10CM:I65.01',
+							'ICD10CM:I65.02',
+							'ICD10CM:I65.03',
+							'ICD10CM:I65.09',
+							'ICD10CM:I65.1',
+							'ICD10CM:I65.2',
+							'ICD10CM:I65.21',
+							'ICD10CM:I65.22',
+							'ICD10CM:I65.23',
+							'ICD10CM:I65.29',
+							'ICD10CM:I65.8',
+							'ICD10CM:I65.9',
+							'ICD10CM:I66',
+							'ICD10CM:I66.01',
+							'ICD10CM:I66.02',
+							'ICD10CM:I66.03',
+							'ICD10CM:I66.09',
+							'ICD10CM:I66.11',
+							'ICD10CM:I66.12',
+							'ICD10CM:I66.19',
+							'ICD10CM:I66.21',
+							'ICD10CM:I66.22',
+							'ICD10CM:I66.29',
+							'ICD10CM:I66.3',
+							'ICD10CM:I66.8',
+							'ICD10CM:I66.9',
+							'ICD10CM:I67',
+							'ICD10CM:I67.0',
+							'ICD10CM:I67.1',
+							'ICD10CM:I67.2',
+							'ICD10CM:I67.3',
+							'ICD10CM:I67.4',
+							'ICD10CM:I67.5',
+							'ICD10CM:I67.6',
+							'ICD10CM:I67.7',
+							'ICD10CM:I67.81',
+							'ICD10CM:I67.82',
+							'ICD10CM:I67.83',
+							'ICD10CM:I67.841',
+							'ICD10CM:I67.848',
+							'ICD10CM:I67.850',
+							'ICD10CM:I67.858',
+							'ICD10CM:I67.89',
+							'ICD10CM:I67.9',
+							'ICD9CM:433.01',
+							'ICD9CM:433.11',
+							'ICD9CM:433.21',
+							'ICD9CM:433.81',
+							'ICD9CM:433.91',
+							'ICD9CM:434.01',
+							'ICD9CM:434.11',
+							'ICD9CM:434.91',
+							'ICD9CM:435.9',
+							'ICD9CM:436',
+							'ICD9CM:438.1',
+							'ICD9CM:438.10',
+							'ICD9CM:438.11',
+							'ICD9CM:438.12',
+							'ICD9CM:438.13',
+							'ICD9CM:438.14',
+							'ICD9CM:438.19',
+							'ICD9CM:438.2',
+							'ICD9CM:438.20',
+							'ICD9CM:438.21',
+							'ICD9CM:438.22',
+							'ICD9CM:438.30',
+							'ICD9CM:438.31',
+							'ICD9CM:438.32',
+							'ICD9CM:438.40',
+							'ICD9CM:438.41',
+							'ICD9CM:438.50',
+							'ICD9CM:438.51',
+							'ICD9CM:438.52',
+							'ICD9CM:438.53',
+							'ICD9CM:438.8',
+							'ICD9CM:438.81',
+							'ICD9CM:438.82',
+							'ICD9CM:438.83',
+							'ICD9CM:438.84',
+							'ICD9CM:438.85',
+							'ICD9CM:438.89',
+							'ICD9CM:438.9',
+							'ICD9CM:V12.54')
+	union
+    select o.PATIENT_NUM
+          ,'COPD' as Outcome
+          ,o.START_DATE as Outcome_Date
+    from FellowsSample.S19.OBSERVATION_FACT o
+	where CONCEPT_CD IN ('ICD10CM:J44',
+							'ICD10CM:J44.0',
+							'ICD10CM:J44.1',
+							'ICD10CM:J44.9',
+							'ICD9CM:496')
+
+	union
+    select o.PATIENT_NUM
+          ,'HF' as Outcome
+          ,o.START_DATE as Outcome_Date
+    from FellowsSample.S19.OBSERVATION_FACT o
+	where CONCEPT_CD IN ('ICD10CM:I50',
+							'ICD10CM:I50.1',
+							'ICD10CM:I50.2',
+							'ICD10CM:I50.20',
+							'ICD10CM:I50.21',
+							'ICD10CM:I50.22',
+							'ICD10CM:I50.23',
+							'ICD10CM:I50.3',
+							'ICD10CM:I50.30',
+							'ICD10CM:I50.31',
+							'ICD10CM:I50.32',
+							'ICD10CM:I50.33',
+							'ICD10CM:I50.4',
+							'ICD10CM:I50.40',
+							'ICD10CM:I50.41',
+							'ICD10CM:I50.42',
+							'ICD10CM:I50.43',
+							'ICD10CM:I50.81',
+							'ICD10CM:I50.810',
+							'ICD10CM:I50.811',
+							'ICD10CM:I50.812',
+							'ICD10CM:I50.813',
+							'ICD10CM:I50.814',
+							'ICD10CM:I50.82',
+							'ICD10CM:I50.83',
+							'ICD10CM:I50.84',
+							'ICD10CM:I50.89',
+							'ICD10CM:I50.9',
+							'ICD9CM:428.0',
+							'ICD9CM:428.1',
+							'ICD9CM:428.2',
+							'ICD9CM:428.20',
+							'ICD9CM:428.21',
+							'ICD9CM:428.22',
+							'ICD9CM:428.23',
+							'ICD9CM:428.3',
+							'ICD9CM:428.30',
+							'ICD9CM:428.31',
+							'ICD9CM:428.32',
+							'ICD9CM:428.33',
+							'ICD9CM:428.40',
+							'ICD9CM:428.41',
+							'ICD9CM:428.42',
+							'ICD9CM:428.43',
+							'ICD9CM:428.9')
+
+	union
+    select o.PATIENT_NUM
+          ,'HTN' as Outcome
+          ,o.START_DATE as Outcome_Date
+    from FellowsSample.S19.OBSERVATION_FACT o
+	where CONCEPT_CD IN ('ICD10CM:I10',
+							'ICD10CM:I11',
+							'ICD10CM:I11.0',
+							'ICD10CM:I11.9',
+							'ICD10CM:I12',
+							'ICD10CM:I12.0',
+							'ICD10CM:I12.9',
+							'ICD10CM:I13.0',
+							'ICD10CM:I13.10',
+							'ICD10CM:I13.11',
+							'ICD10CM:I13.2',
+							'ICD10CM:R03',
+							'ICD10CM:R03.0',
+							'ICD10CM:R03.1',
+							'ICD9CM:401',
+							'ICD9CM:401.0',
+							'ICD9CM:401.1',
+							'ICD9CM:401.9',
+							'ICD9CM:402',
+							'ICD9CM:402.0',
+							'ICD9CM:402.00',
+							'ICD9CM:402.01',
+							'ICD9CM:402.1',
+							'ICD9CM:402.10',
+							'ICD9CM:402.11',
+							'ICD9CM:402.9',
+							'ICD9CM:402.90',
+							'ICD9CM:402.91',
+							'ICD9CM:403',
+							'ICD9CM:403.00',
+							'ICD9CM:403.01',
+							'ICD9CM:403.1',
+							'ICD9CM:403.10',
+							'ICD9CM:403.11',
+							'ICD9CM:403.9',
+							'ICD9CM:403.90',
+							'ICD9CM:403.91',
+							'ICD9CM:404',
+							'ICD9CM:404.0',
+							'ICD9CM:404.00',
+							'ICD9CM:404.02',
+							'ICD9CM:404.03',
+							'ICD9CM:404.1',
+							'ICD9CM:404.10',
+							'ICD9CM:404.11',
+							'ICD9CM:404.12',
+							'ICD9CM:404.13',
+							'ICD9CM:404.9',
+							'ICD9CM:404.90',
+							'ICD9CM:404.91',
+							'ICD9CM:404.92',
+							'ICD9CM:404.93',
+							'ICD9CM:405.0',
+							'ICD9CM:405.01',
+							'ICD9CM:405.09',
+							'ICD9CM:405.1',
+							'ICD9CM:405.11',
+							'ICD9CM:405.19',
+							'ICD9CM:405.91',
+							'ICD9CM:405.99')
+    
+	union
+    select o.PATIENT_NUM
+          ,'MI' as Outcome
+          ,o.START_DATE as Outcome_Date
+    from FellowsSample.S19.OBSERVATION_FACT o
+	where CONCEPT_CD IN ('ICD10CM:I21',
+							'ICD10CM:I21.0',
+							'ICD10CM:I21.01',
+							'ICD10CM:I21.02',
+							'ICD10CM:I21.09',
+							'ICD10CM:I21.1',
+							'ICD10CM:I21.11',
+							'ICD10CM:I21.19',
+							'ICD10CM:I21.2',
+							'ICD10CM:I21.21',
+							'ICD10CM:I21.29',
+							'ICD10CM:I21.3',
+							'ICD10CM:I21.4',
+							'ICD10CM:I21.9',
+							'ICD10CM:I21.A1',
+							'ICD10CM:I21.A9',
+							'ICD10CM:I22.0',
+							'ICD10CM:I22.1',
+							'ICD10CM:I22.2',
+							'ICD10CM:I22.8',
+							'ICD10CM:I22.9',
+							'ICD10CM:I23',
+							'ICD10CM:I23.1',
+							'ICD10CM:I23.2',
+							'ICD10CM:I23.3',
+							'ICD10CM:I23.5',
+							'ICD10CM:I23.6',
+							'ICD10CM:I23.7',
+							'ICD10CM:I23.8',
+							'ICD9CM:410',
+							'ICD9CM:410.00',
+							'ICD9CM:410.01',
+							'ICD9CM:410.02',
+							'ICD9CM:410.10',
+							'ICD9CM:410.11',
+							'ICD9CM:410.12',
+							'ICD9CM:410.20',
+							'ICD9CM:410.21',
+							'ICD9CM:410.22',
+							'ICD9CM:410.30',
+							'ICD9CM:410.31',
+							'ICD9CM:410.32',
+							'ICD9CM:410.40',
+							'ICD9CM:410.41',
+							'ICD9CM:410.42',
+							'ICD9CM:410.50',
+							'ICD9CM:410.52',
+							'ICD9CM:410.60',
+							'ICD9CM:410.62',
+							'ICD9CM:410.7',
+							'ICD9CM:410.70',
+							'ICD9CM:410.71',
+							'ICD9CM:410.72',
+							'ICD9CM:410.8',
+							'ICD9CM:410.80',
+							'ICD9CM:410.81',
+							'ICD9CM:410.82',
+							'ICD9CM:410.9',
+							'ICD9CM:410.90',
+							'ICD9CM:410.91',
+							'ICD9CM:410.92',
+							'ICD9CM:412')
+
+	union
+    select o.PATIENT_NUM
+          ,'Obesity' as Outcome
+          ,o.START_DATE as Outcome_Date
+    from FellowsSample.S19.OBSERVATION_FACT o
+	where CONCEPT_CD IN ('ICD10CM:I21',
+							'ICD10CM:I21.0',
+							'ICD10CM:I21.01',
+							'ICD10CM:I21.02',
+							'ICD10CM:I21.09',
+							'ICD10CM:I21.1',
+							'ICD10CM:I21.11',
+							'ICD10CM:I21.19',
+							'ICD10CM:I21.2',
+							'ICD10CM:I21.21',
+							'ICD10CM:I21.29',
+							'ICD10CM:I21.3',
+							'ICD10CM:I21.4',
+							'ICD10CM:I21.9',
+							'ICD10CM:I21.A1',
+							'ICD10CM:I21.A9',
+							'ICD10CM:I22.0',
+							'ICD10CM:I22.1',
+							'ICD10CM:I22.2',
+							'ICD10CM:I22.8',
+							'ICD10CM:I22.9',
+							'ICD10CM:I23',
+							'ICD10CM:I23.1',
+							'ICD10CM:I23.2',
+							'ICD10CM:I23.3',
+							'ICD10CM:I23.5',
+							'ICD10CM:I23.6',
+							'ICD10CM:I23.7',
+							'ICD10CM:I23.8',
+							'ICD9CM:410',
+							'ICD9CM:410.00',
+							'ICD9CM:410.01',
+							'ICD9CM:410.02',
+							'ICD9CM:410.10',
+							'ICD9CM:410.11',
+							'ICD9CM:410.12',
+							'ICD9CM:410.20',
+							'ICD9CM:410.21',
+							'ICD9CM:410.22',
+							'ICD9CM:410.30',
+							'ICD9CM:410.31',
+							'ICD9CM:410.32',
+							'ICD9CM:410.40',
+							'ICD9CM:410.41',
+							'ICD9CM:410.42',
+							'ICD9CM:410.50',
+							'ICD9CM:410.52',
+							'ICD9CM:410.60',
+							'ICD9CM:410.62',
+							'ICD9CM:410.7',
+							'ICD9CM:410.70',
+							'ICD9CM:410.71',
+							'ICD9CM:410.72',
+							'ICD9CM:410.8',
+							'ICD9CM:410.80',
+							'ICD9CM:410.81',
+							'ICD9CM:410.82',
+							'ICD9CM:410.9',
+							'ICD9CM:410.90',
+							'ICD9CM:410.91',
+							'ICD9CM:410.92',
+							'ICD9CM:412')
+
+	union
+    select o.PATIENT_NUM
+          ,'Stroke' as Outcome
+          ,o.START_DATE as Outcome_Date
+    from FellowsSample.S19.OBSERVATION_FACT o
+	where CONCEPT_CD IN ('ICD10CM:I61'
+,'ICD10CM:I61.0'
+,'ICD10CM:I61.1'
+,'ICD10CM:I61.2'
+,'ICD10CM:I61.3'
+,'ICD10CM:I61.4'
+,'ICD10CM:I61.5'
+,'ICD10CM:I61.6'
+,'ICD10CM:I61.8'
+,'ICD10CM:I61.9'
+,'ICD10CM:I62.0'
+,'ICD10CM:I62.00'
+,'ICD10CM:I62.01'
+,'ICD10CM:I62.02'
+,'ICD10CM:I62.03'
+,'ICD10CM:I62.1'
+,'ICD10CM:I62.9'
+,'ICD9CM:431'
+,'ICD9CM:434.0'
+,'ICD9CM:434.00'
+,'ICD9CM:434.01'
+,'ICD9CM:434.1'
+,'ICD9CM:434.10'
+,'ICD9CM:434.11'
+,'ICD9CM:434.9'
+,'ICD9CM:434.90'
+,'ICD9CM:434.91')
+
+	union
+    select o.PATIENT_NUM
+          ,'T2D' as Outcome
+          ,o.START_DATE as Outcome_Date
+    from FellowsSample.S19.OBSERVATION_FACT o
+	where CONCEPT_CD IN ('ICD10CM:E08.42'
+,'ICD10CM:E10'
+,'ICD10CM:E10.10'
+,'ICD10CM:E10.11'
+,'ICD10CM:E10.2'
+,'ICD10CM:E10.21'
+,'ICD10CM:E10.22'
+,'ICD10CM:E10.29'
+,'ICD10CM:E10.311'
+,'ICD10CM:E10.319'
+,'ICD10CM:E10.3211'
+,'ICD10CM:E10.3212'
+,'ICD10CM:E10.3219'
+,'ICD10CM:E10.329'
+,'ICD10CM:E10.3293'
+,'ICD10CM:E10.3299'
+,'ICD10CM:E10.3312'
+,'ICD10CM:E10.3313'
+,'ICD10CM:E10.3391'
+,'ICD10CM:E10.3393'
+,'ICD10CM:E10.3399'
+,'ICD10CM:E10.3412'
+,'ICD10CM:E10.3413'
+,'ICD10CM:E10.3493'
+,'ICD10CM:E10.3499'
+,'ICD10CM:E10.351'
+,'ICD10CM:E10.3512'
+,'ICD10CM:E10.3513'
+,'ICD10CM:E10.3519'
+,'ICD10CM:E10.3522'
+,'ICD10CM:E10.3543'
+,'ICD10CM:E10.3551'
+,'ICD10CM:E10.3553'
+,'ICD10CM:E10.3559'
+,'ICD10CM:E10.3591'
+,'ICD10CM:E10.3593'
+,'ICD10CM:E10.3599'
+,'ICD10CM:E10.36'
+,'ICD10CM:E10.39'
+,'ICD10CM:E10.4'
+,'ICD10CM:E10.40'
+,'ICD10CM:E10.41'
+,'ICD10CM:E10.42'
+,'ICD10CM:E10.43'
+,'ICD10CM:E10.49'
+,'ICD10CM:E10.51'
+,'ICD10CM:E10.52'
+,'ICD10CM:E10.59'
+,'ICD10CM:E10.6'
+,'ICD10CM:E10.61'
+,'ICD10CM:E10.610'
+,'ICD10CM:E10.618'
+,'ICD10CM:E10.62'
+,'ICD10CM:E10.620'
+,'ICD10CM:E10.621'
+,'ICD10CM:E10.622'
+,'ICD10CM:E10.628'
+,'ICD10CM:E10.638'
+,'ICD10CM:E10.641'
+,'ICD10CM:E10.649'
+,'ICD10CM:E10.65'
+,'ICD10CM:E10.69'
+,'ICD10CM:E10.8'
+,'ICD10CM:E10.9'
+,'ICD10CM:E11'
+,'ICD10CM:E11.0'
+,'ICD10CM:E11.00'
+,'ICD10CM:E11.01'
+,'ICD10CM:E11.10'
+,'ICD10CM:E11.11'
+,'ICD10CM:E11.2'
+,'ICD10CM:E11.21'
+,'ICD10CM:E11.22'
+,'ICD10CM:E11.29'
+,'ICD10CM:E11.3'
+,'ICD10CM:E11.31'
+,'ICD10CM:E11.311'
+,'ICD10CM:E11.319'
+,'ICD10CM:E11.32'
+,'ICD10CM:E11.321'
+,'ICD10CM:E11.3211'
+,'ICD10CM:E11.3212'
+,'ICD10CM:E11.3213'
+,'ICD10CM:E11.3219'
+,'ICD10CM:E11.329'
+,'ICD10CM:E11.3291'
+,'ICD10CM:E11.3292'
+,'ICD10CM:E11.3293'
+,'ICD10CM:E11.3299'
+,'ICD10CM:E11.3311'
+,'ICD10CM:E11.3312'
+,'ICD10CM:E11.3313'
+,'ICD10CM:E11.3319'
+,'ICD10CM:E11.339'
+,'ICD10CM:E11.3391'
+,'ICD10CM:E11.3392'
+,'ICD10CM:E11.3393'
+,'ICD10CM:E11.3399'
+,'ICD10CM:E11.341'
+,'ICD10CM:E11.3411'
+,'ICD10CM:E11.3412'
+,'ICD10CM:E11.3413'
+,'ICD10CM:E11.3419'
+,'ICD10CM:E11.349'
+,'ICD10CM:E11.3491'
+,'ICD10CM:E11.3492'
+,'ICD10CM:E11.3493'
+,'ICD10CM:E11.3499'
+,'ICD10CM:E11.3511'
+,'ICD10CM:E11.3512'
+,'ICD10CM:E11.3513'
+,'ICD10CM:E11.3519'
+,'ICD10CM:E11.352'
+,'ICD10CM:E11.3522'
+,'ICD10CM:E11.3523'
+,'ICD10CM:E11.3529'
+,'ICD10CM:E11.3531'
+,'ICD10CM:E11.3532'
+,'ICD10CM:E11.3533'
+,'ICD10CM:E11.3541'
+,'ICD10CM:E11.3551'
+,'ICD10CM:E11.3552'
+,'ICD10CM:E11.3553'
+,'ICD10CM:E11.3559'
+,'ICD10CM:E11.359'
+,'ICD10CM:E11.3591'
+,'ICD10CM:E11.3592'
+,'ICD10CM:E11.3593'
+,'ICD10CM:E11.3599'
+,'ICD10CM:E11.36'
+,'ICD10CM:E11.37X2'
+,'ICD10CM:E11.37X9'
+,'ICD10CM:E11.39'
+,'ICD10CM:E11.4'
+,'ICD10CM:E11.40'
+,'ICD10CM:E11.41'
+,'ICD10CM:E11.42'
+,'ICD10CM:E11.43'
+,'ICD10CM:E11.44'
+,'ICD10CM:E11.49'
+,'ICD10CM:E11.5'
+,'ICD10CM:E11.51'
+,'ICD10CM:E11.52'
+,'ICD10CM:E11.59'
+,'ICD10CM:E11.6'
+,'ICD10CM:E11.61'
+,'ICD10CM:E11.610'
+,'ICD10CM:E11.618'
+,'ICD10CM:E11.62'
+,'ICD10CM:E11.620'
+,'ICD10CM:E11.621'
+,'ICD10CM:E11.622'
+,'ICD10CM:E11.628'
+,'ICD10CM:E11.630'
+,'ICD10CM:E11.638'
+,'ICD10CM:E11.64'
+,'ICD10CM:E11.641'
+,'ICD10CM:E11.649'
+,'ICD10CM:E11.65'
+,'ICD10CM:E11.69'
+,'ICD10CM:E11.8'
+,'ICD10CM:E11.9'
+,'ICD10CM:Z13.42'
+,'ICD9CM:250'
+,'ICD9CM:250.0'
+,'ICD9CM:250.00'
+,'ICD9CM:250.01'
+,'ICD9CM:250.02'
+,'ICD9CM:250.03'
+,'ICD9CM:250.1'
+,'ICD9CM:250.10'
+,'ICD9CM:250.11'
+,'ICD9CM:250.12'
+,'ICD9CM:250.13'
+,'ICD9CM:250.2'
+,'ICD9CM:250.20'
+,'ICD9CM:250.21'
+,'ICD9CM:250.22'
+,'ICD9CM:250.23'
+,'ICD9CM:250.30'
+,'ICD9CM:250.32'
+,'ICD9CM:250.4'
+,'ICD9CM:250.40'
+,'ICD9CM:250.41'
+,'ICD9CM:250.42'
+,'ICD9CM:250.43'
+,'ICD9CM:250.50'
+,'ICD9CM:250.51'
+,'ICD9CM:250.52'
+,'ICD9CM:250.53'
+,'ICD9CM:250.6'
+,'ICD9CM:250.60'
+,'ICD9CM:250.61'
+,'ICD9CM:250.62'
+,'ICD9CM:250.63'
+,'ICD9CM:250.7'
+,'ICD9CM:250.70'
+,'ICD9CM:250.71'
+,'ICD9CM:250.72'
+,'ICD9CM:250.73'
+,'ICD9CM:250.8'
+,'ICD9CM:250.80'
+,'ICD9CM:250.81'
+,'ICD9CM:250.82'
+,'ICD9CM:250.83'
+,'ICD9CM:250.9'
+,'ICD9CM:250.90'
+,'ICD9CM:250.91'
+,'ICD9CM:250.92'
+,'ICD9CM:250.93'
+,'ICD9CM:357.2'
+,'ICD9CM:362.0'
+,'ICD9CM:362.01'
+,'ICD9CM:362.02'
+,'ICD9CM:362.03'
+,'ICD9CM:362.04'
+,'ICD9CM:362.05'
+,'ICD9CM:362.06'
+,'ICD9CM:362.07')
+
+), mace_occur as (
+select p.PATIENT_NUM
+      ,datediff(day,p.OSA_CONTROL_INDEX_DATE,m.Outcome_Date) as DAYS_OSA_OUTCOME
+      ,case when datediff(day,p.OSA_CONTROL_INDEX_DATE,m.Outcome_Date)<=0 then concat(m.Outcome,'_BEF')
+            else concat(m.Outcome,'_AFT') end as MACE_BEF_AFT
+from S19.dbo.Pat_OSA_INS_Index_Included_Demo_SDOH p
+left join mace_event m on p.PATIENT_NUM = m.PATIENT_NUM 
+), mace_pivot as (
+select * from mace_occur
+pivot (min(DAYS_OSA_OUTCOME) for MACE_BEF_AFT
+		in (
+		[CAD_BEF],
+		[CAD_AFT],
+		[CerebroVD_BEF],
+		[CerebroVD_AFT],
+		[COPD_BEF],
+		[COPD_AFT],
+		[HF_BEF],
+		[HF_AFT],
+		[HTN_BEF],
+		[HTN_AFT],
+		[MI_BEF],
+		[MI_AFT],
+		[Obesity_BEF],
+		[Obesity_AFT],
+		[Stroke_BEF],
+		[Stroke_AFT],
+		[T2D_BEF],
+		[T2D_AFT]
+		)
+		) as pvt
+) 
+select p.PATIENT_NUM
+      ,p.OSA_CONTROL_INDEX_DATE
+      ,m.[CAD_BEF]
+      ,m.[CAD_AFT]
+      ,m.[CerebroVD_BEF]
+      ,m.[CerebroVD_AFT]
+	  ,m.[COPD_BEF]
+	  ,m.[COPD_AFT]
+	  ,m.[HF_BEF]
+	  ,m.[HF_AFT]
+	  ,m.[HTN_BEF]
+	  ,m.[HTN_AFT]
+	  ,m.[MI_BEF]
+	  ,m.[MI_AFT]
+	  ,m.[Obesity_BEF]
+	  ,m.[Obesity_AFT]
+	  ,m.[Stroke_BEF]
+	  ,m.[Stroke_AFT]
+	  ,m.[T2D_BEF]
+	  ,m.[T2D_AFT]
+      
+      --,NULLIF(least(NVL(m.MI_BEF, 999999),NVL(m.STROKE_BEF, 999999),NVL(m.HF_BEF, 999999),NVL(m.REVASC_BEF, 999999)),999999) as MACE_BEF
+      --,NULLIF(least(NVL(m.MI_AFT, 999999),NVL(m.STROKE_AFT, 999999),NVL(m.HF_AFT, 999999),NVL(m.REVASC_AFT, 999999)),999999) as MACE_AFT 
+      --,d.DEATH_DATE
+      --,datediff('day',p.OSA_DX1_DATE,d.DEATH_DATE) as DAYS_OSA_TO_DEATH
+into S19.dbo.OSA_OUTCOMES
+from S19.dbo.Pat_OSA_INS_Index_Included_Demo_SDOH p
+left join mace_pivot m on p.PATIENT_NUM = m.PATIENT_NUM
+;
+
+with mace_event as (
+    select o.PATIENT_NUM
+          ,'CAD' as Outcome
+          ,o.START_DATE as Outcome_Date
+    from FellowsSample.S19.OBSERVATION_FACT o
+	where CONCEPT_CD IN ('ICD10CM:I25',
+							'ICD10CM:I25.1',
+							'ICD10CM:I25.10',
+							'ICD10CM:I25.11',
+							'ICD10CM:I25.110',
+							'ICD10CM:I25.111',
+							'ICD10CM:I25.118',
+							'ICD10CM:I25.119',
+							'ICD10CM:I25.2',
+							'ICD10CM:I25.3',
+							'ICD10CM:I25.41',
+							'ICD10CM:I25.42',
+							'ICD10CM:I25.5',
+							'ICD10CM:I25.6',
+							'ICD10CM:I25.70',
+							'ICD10CM:I25.700',
+							'ICD10CM:I25.701',
+							'ICD10CM:I25.708',
+							'ICD10CM:I25.709',
+							'ICD10CM:I25.71',
+							'ICD10CM:I25.710',
+							'ICD10CM:I25.711',
+							'ICD10CM:I25.718',
+							'ICD10CM:I25.719',
+							'ICD10CM:I25.72',
+							'ICD10CM:I25.720',
+							'ICD10CM:I25.721',
+							'ICD10CM:I25.728',
+							'ICD10CM:I25.729',
+							'ICD10CM:I25.730',
+							'ICD10CM:I25.731',
+							'ICD10CM:I25.738',
+							'ICD10CM:I25.739',
+							'ICD10CM:I25.758',
+							'ICD10CM:I25.759',
+							'ICD10CM:I25.760',
+							'ICD10CM:I25.761',
+							'ICD10CM:I25.768',
+							'ICD10CM:I25.769',
+							'ICD10CM:I25.79',
+							'ICD10CM:I25.790',
+							'ICD10CM:I25.791',
+							'ICD10CM:I25.798',
+							'ICD10CM:I25.799',
+							'ICD10CM:I25.8',
+							'ICD10CM:I25.81',
+							'ICD10CM:I25.810',
+							'ICD10CM:I25.811',
+							'ICD10CM:I25.812',
+							'ICD10CM:I25.82',
+							'ICD10CM:I25.83',
+							'ICD10CM:I25.84',
+							'ICD10CM:I25.89',
+							'ICD10CM:I25.9',
+							'ICD9CM:411.0',
+							'ICD9CM:411.1',
+							'ICD9CM:411.89',
+							'ICD9CM:414',
+							'ICD9CM:414.0',
+							'ICD9CM:414.00',
+							'ICD9CM:414.01',
+							'ICD9CM:414.02',
+							'ICD9CM:414.03',
+							'ICD9CM:414.04',
+							'ICD9CM:414.05',
+							'ICD9CM:414.06',
+							'ICD9CM:414.07',
+							'ICD9CM:414.1',
+							'ICD9CM:414.10',
+							'ICD9CM:414.11',
+							'ICD9CM:414.12',
+							'ICD9CM:414.19',
+							'ICD9CM:414.2',
+							'ICD9CM:414.3',
+							'ICD9CM:414.4',
+							'ICD9CM:414.8',
+							'ICD9CM:414.9')
+    
+	union
+    select o.PATIENT_NUM
+          ,'CerebroVD' as Outcome
+          ,o.START_DATE as Outcome_Date
+    from FellowsSample.S19.OBSERVATION_FACT o
+	where CONCEPT_CD IN ('ICD10CM:I60',
+							'ICD10CM:I60.00',
+							'ICD10CM:I60.01',
+							'ICD10CM:I60.10',
+							'ICD10CM:I60.11',
+							'ICD10CM:I60.12',
+							'ICD10CM:I60.2',
+							'ICD10CM:I60.22',
+							'ICD10CM:I60.3',
+							'ICD10CM:I60.30',
+							'ICD10CM:I60.31',
+							'ICD10CM:I60.32',
+							'ICD10CM:I60.4',
+							'ICD10CM:I60.51',
+							'ICD10CM:I60.6',
+							'ICD10CM:I60.7',
+							'ICD10CM:I60.8',
+							'ICD10CM:I60.9',
+							'ICD10CM:I61',
+							'ICD10CM:I61.0',
+							'ICD10CM:I61.1',
+							'ICD10CM:I61.2',
+							'ICD10CM:I61.3',
+							'ICD10CM:I61.4',
+							'ICD10CM:I61.5',
+							'ICD10CM:I61.6',
+							'ICD10CM:I61.8',
+							'ICD10CM:I61.9',
+							'ICD10CM:I62',
+							'ICD10CM:I62.0',
+							'ICD10CM:I62.00',
+							'ICD10CM:I62.01',
+							'ICD10CM:I62.02',
+							'ICD10CM:I62.03',
+							'ICD10CM:I62.1',
+							'ICD10CM:I62.9',
+							'ICD10CM:I63',
+							'ICD10CM:I63.00',
+							'ICD10CM:I63.011',
+							'ICD10CM:I63.012',
+							'ICD10CM:I63.013',
+							'ICD10CM:I63.019',
+							'ICD10CM:I63.02',
+							'ICD10CM:I63.03',
+							'ICD10CM:I63.031',
+							'ICD10CM:I63.032',
+							'ICD10CM:I63.033',
+							'ICD10CM:I63.039',
+							'ICD10CM:I63.09',
+							'ICD10CM:I63.10',
+							'ICD10CM:I63.111',
+							'ICD10CM:I63.112',
+							'ICD10CM:I63.113',
+							'ICD10CM:I63.119',
+							'ICD10CM:I63.12',
+							'ICD10CM:I63.13',
+							'ICD10CM:I63.131',
+							'ICD10CM:I63.132',
+							'ICD10CM:I63.133',
+							'ICD10CM:I63.139',
+							'ICD10CM:I63.19',
+							'ICD10CM:I63.2',
+							'ICD10CM:I63.20',
+							'ICD10CM:I63.211',
+							'ICD10CM:I63.212',
+							'ICD10CM:I63.213',
+							'ICD10CM:I63.219',
+							'ICD10CM:I63.22',
+							'ICD10CM:I63.23',
+							'ICD10CM:I63.231',
+							'ICD10CM:I63.232',
+							'ICD10CM:I63.233',
+							'ICD10CM:I63.239',
+							'ICD10CM:I63.29',
+							'ICD10CM:I63.30',
+							'ICD10CM:I63.311',
+							'ICD10CM:I63.312',
+							'ICD10CM:I63.313',
+							'ICD10CM:I63.319',
+							'ICD10CM:I63.321',
+							'ICD10CM:I63.322',
+							'ICD10CM:I63.323',
+							'ICD10CM:I63.329',
+							'ICD10CM:I63.331',
+							'ICD10CM:I63.332',
+							'ICD10CM:I63.333',
+							'ICD10CM:I63.339',
+							'ICD10CM:I63.341',
+							'ICD10CM:I63.342',
+							'ICD10CM:I63.343',
+							'ICD10CM:I63.349',
+							'ICD10CM:I63.39',
+							'ICD10CM:I63.4',
+							'ICD10CM:I63.40',
+							'ICD10CM:I63.411',
+							'ICD10CM:I63.412',
+							'ICD10CM:I63.413',
+							'ICD10CM:I63.419',
+							'ICD10CM:I63.421',
+							'ICD10CM:I63.422',
+							'ICD10CM:I63.423',
+							'ICD10CM:I63.429',
+							'ICD10CM:I63.431',
+							'ICD10CM:I63.432',
+							'ICD10CM:I63.433',
+							'ICD10CM:I63.439',
+							'ICD10CM:I63.441',
+							'ICD10CM:I63.442',
+							'ICD10CM:I63.443',
+							'ICD10CM:I63.449',
+							'ICD10CM:I63.49',
+							'ICD10CM:I63.5',
+							'ICD10CM:I63.50',
+							'ICD10CM:I63.511',
+							'ICD10CM:I63.512',
+							'ICD10CM:I63.513',
+							'ICD10CM:I63.519',
+							'ICD10CM:I63.521',
+							'ICD10CM:I63.522',
+							'ICD10CM:I63.529',
+							'ICD10CM:I63.531',
+							'ICD10CM:I63.532',
+							'ICD10CM:I63.533',
+							'ICD10CM:I63.539',
+							'ICD10CM:I63.541',
+							'ICD10CM:I63.542',
+							'ICD10CM:I63.543',
+							'ICD10CM:I63.549',
+							'ICD10CM:I63.59',
+							'ICD10CM:I63.6',
+							'ICD10CM:I63.8',
+							'ICD10CM:I63.81',
+							'ICD10CM:I63.89',
+							'ICD10CM:I63.9',
+							'ICD10CM:I65',
+							'ICD10CM:I65.0',
+							'ICD10CM:I65.01',
+							'ICD10CM:I65.02',
+							'ICD10CM:I65.03',
+							'ICD10CM:I65.09',
+							'ICD10CM:I65.1',
+							'ICD10CM:I65.2',
+							'ICD10CM:I65.21',
+							'ICD10CM:I65.22',
+							'ICD10CM:I65.23',
+							'ICD10CM:I65.29',
+							'ICD10CM:I65.8',
+							'ICD10CM:I65.9',
+							'ICD10CM:I66',
+							'ICD10CM:I66.01',
+							'ICD10CM:I66.02',
+							'ICD10CM:I66.03',
+							'ICD10CM:I66.09',
+							'ICD10CM:I66.11',
+							'ICD10CM:I66.12',
+							'ICD10CM:I66.19',
+							'ICD10CM:I66.21',
+							'ICD10CM:I66.22',
+							'ICD10CM:I66.29',
+							'ICD10CM:I66.3',
+							'ICD10CM:I66.8',
+							'ICD10CM:I66.9',
+							'ICD10CM:I67',
+							'ICD10CM:I67.0',
+							'ICD10CM:I67.1',
+							'ICD10CM:I67.2',
+							'ICD10CM:I67.3',
+							'ICD10CM:I67.4',
+							'ICD10CM:I67.5',
+							'ICD10CM:I67.6',
+							'ICD10CM:I67.7',
+							'ICD10CM:I67.81',
+							'ICD10CM:I67.82',
+							'ICD10CM:I67.83',
+							'ICD10CM:I67.841',
+							'ICD10CM:I67.848',
+							'ICD10CM:I67.850',
+							'ICD10CM:I67.858',
+							'ICD10CM:I67.89',
+							'ICD10CM:I67.9',
+							'ICD9CM:433.01',
+							'ICD9CM:433.11',
+							'ICD9CM:433.21',
+							'ICD9CM:433.81',
+							'ICD9CM:433.91',
+							'ICD9CM:434.01',
+							'ICD9CM:434.11',
+							'ICD9CM:434.91',
+							'ICD9CM:435.9',
+							'ICD9CM:436',
+							'ICD9CM:438.1',
+							'ICD9CM:438.10',
+							'ICD9CM:438.11',
+							'ICD9CM:438.12',
+							'ICD9CM:438.13',
+							'ICD9CM:438.14',
+							'ICD9CM:438.19',
+							'ICD9CM:438.2',
+							'ICD9CM:438.20',
+							'ICD9CM:438.21',
+							'ICD9CM:438.22',
+							'ICD9CM:438.30',
+							'ICD9CM:438.31',
+							'ICD9CM:438.32',
+							'ICD9CM:438.40',
+							'ICD9CM:438.41',
+							'ICD9CM:438.50',
+							'ICD9CM:438.51',
+							'ICD9CM:438.52',
+							'ICD9CM:438.53',
+							'ICD9CM:438.8',
+							'ICD9CM:438.81',
+							'ICD9CM:438.82',
+							'ICD9CM:438.83',
+							'ICD9CM:438.84',
+							'ICD9CM:438.85',
+							'ICD9CM:438.89',
+							'ICD9CM:438.9',
+							'ICD9CM:V12.54')
+	union
+    select o.PATIENT_NUM
+          ,'COPD' as Outcome
+          ,o.START_DATE as Outcome_Date
+    from FellowsSample.S19.OBSERVATION_FACT o
+	where CONCEPT_CD IN ('ICD10CM:J44',
+							'ICD10CM:J44.0',
+							'ICD10CM:J44.1',
+							'ICD10CM:J44.9',
+							'ICD9CM:496')
+
+	union
+    select o.PATIENT_NUM
+          ,'HF' as Outcome
+          ,o.START_DATE as Outcome_Date
+    from FellowsSample.S19.OBSERVATION_FACT o
+	where CONCEPT_CD IN ('ICD10CM:I50',
+							'ICD10CM:I50.1',
+							'ICD10CM:I50.2',
+							'ICD10CM:I50.20',
+							'ICD10CM:I50.21',
+							'ICD10CM:I50.22',
+							'ICD10CM:I50.23',
+							'ICD10CM:I50.3',
+							'ICD10CM:I50.30',
+							'ICD10CM:I50.31',
+							'ICD10CM:I50.32',
+							'ICD10CM:I50.33',
+							'ICD10CM:I50.4',
+							'ICD10CM:I50.40',
+							'ICD10CM:I50.41',
+							'ICD10CM:I50.42',
+							'ICD10CM:I50.43',
+							'ICD10CM:I50.81',
+							'ICD10CM:I50.810',
+							'ICD10CM:I50.811',
+							'ICD10CM:I50.812',
+							'ICD10CM:I50.813',
+							'ICD10CM:I50.814',
+							'ICD10CM:I50.82',
+							'ICD10CM:I50.83',
+							'ICD10CM:I50.84',
+							'ICD10CM:I50.89',
+							'ICD10CM:I50.9',
+							'ICD9CM:428.0',
+							'ICD9CM:428.1',
+							'ICD9CM:428.2',
+							'ICD9CM:428.20',
+							'ICD9CM:428.21',
+							'ICD9CM:428.22',
+							'ICD9CM:428.23',
+							'ICD9CM:428.3',
+							'ICD9CM:428.30',
+							'ICD9CM:428.31',
+							'ICD9CM:428.32',
+							'ICD9CM:428.33',
+							'ICD9CM:428.40',
+							'ICD9CM:428.41',
+							'ICD9CM:428.42',
+							'ICD9CM:428.43',
+							'ICD9CM:428.9')
+
+	union
+    select o.PATIENT_NUM
+          ,'HTN' as Outcome
+          ,o.START_DATE as Outcome_Date
+    from FellowsSample.S19.OBSERVATION_FACT o
+	where CONCEPT_CD IN ('ICD10CM:I10',
+							'ICD10CM:I11',
+							'ICD10CM:I11.0',
+							'ICD10CM:I11.9',
+							'ICD10CM:I12',
+							'ICD10CM:I12.0',
+							'ICD10CM:I12.9',
+							'ICD10CM:I13.0',
+							'ICD10CM:I13.10',
+							'ICD10CM:I13.11',
+							'ICD10CM:I13.2',
+							'ICD10CM:R03',
+							'ICD10CM:R03.0',
+							'ICD10CM:R03.1',
+							'ICD9CM:401',
+							'ICD9CM:401.0',
+							'ICD9CM:401.1',
+							'ICD9CM:401.9',
+							'ICD9CM:402',
+							'ICD9CM:402.0',
+							'ICD9CM:402.00',
+							'ICD9CM:402.01',
+							'ICD9CM:402.1',
+							'ICD9CM:402.10',
+							'ICD9CM:402.11',
+							'ICD9CM:402.9',
+							'ICD9CM:402.90',
+							'ICD9CM:402.91',
+							'ICD9CM:403',
+							'ICD9CM:403.00',
+							'ICD9CM:403.01',
+							'ICD9CM:403.1',
+							'ICD9CM:403.10',
+							'ICD9CM:403.11',
+							'ICD9CM:403.9',
+							'ICD9CM:403.90',
+							'ICD9CM:403.91',
+							'ICD9CM:404',
+							'ICD9CM:404.0',
+							'ICD9CM:404.00',
+							'ICD9CM:404.02',
+							'ICD9CM:404.03',
+							'ICD9CM:404.1',
+							'ICD9CM:404.10',
+							'ICD9CM:404.11',
+							'ICD9CM:404.12',
+							'ICD9CM:404.13',
+							'ICD9CM:404.9',
+							'ICD9CM:404.90',
+							'ICD9CM:404.91',
+							'ICD9CM:404.92',
+							'ICD9CM:404.93',
+							'ICD9CM:405.0',
+							'ICD9CM:405.01',
+							'ICD9CM:405.09',
+							'ICD9CM:405.1',
+							'ICD9CM:405.11',
+							'ICD9CM:405.19',
+							'ICD9CM:405.91',
+							'ICD9CM:405.99')
+    
+	union
+    select o.PATIENT_NUM
+          ,'MI' as Outcome
+          ,o.START_DATE as Outcome_Date
+    from FellowsSample.S19.OBSERVATION_FACT o
+	where CONCEPT_CD IN ('ICD10CM:I21',
+							'ICD10CM:I21.0',
+							'ICD10CM:I21.01',
+							'ICD10CM:I21.02',
+							'ICD10CM:I21.09',
+							'ICD10CM:I21.1',
+							'ICD10CM:I21.11',
+							'ICD10CM:I21.19',
+							'ICD10CM:I21.2',
+							'ICD10CM:I21.21',
+							'ICD10CM:I21.29',
+							'ICD10CM:I21.3',
+							'ICD10CM:I21.4',
+							'ICD10CM:I21.9',
+							'ICD10CM:I21.A1',
+							'ICD10CM:I21.A9',
+							'ICD10CM:I22.0',
+							'ICD10CM:I22.1',
+							'ICD10CM:I22.2',
+							'ICD10CM:I22.8',
+							'ICD10CM:I22.9',
+							'ICD10CM:I23',
+							'ICD10CM:I23.1',
+							'ICD10CM:I23.2',
+							'ICD10CM:I23.3',
+							'ICD10CM:I23.5',
+							'ICD10CM:I23.6',
+							'ICD10CM:I23.7',
+							'ICD10CM:I23.8',
+							'ICD9CM:410',
+							'ICD9CM:410.00',
+							'ICD9CM:410.01',
+							'ICD9CM:410.02',
+							'ICD9CM:410.10',
+							'ICD9CM:410.11',
+							'ICD9CM:410.12',
+							'ICD9CM:410.20',
+							'ICD9CM:410.21',
+							'ICD9CM:410.22',
+							'ICD9CM:410.30',
+							'ICD9CM:410.31',
+							'ICD9CM:410.32',
+							'ICD9CM:410.40',
+							'ICD9CM:410.41',
+							'ICD9CM:410.42',
+							'ICD9CM:410.50',
+							'ICD9CM:410.52',
+							'ICD9CM:410.60',
+							'ICD9CM:410.62',
+							'ICD9CM:410.7',
+							'ICD9CM:410.70',
+							'ICD9CM:410.71',
+							'ICD9CM:410.72',
+							'ICD9CM:410.8',
+							'ICD9CM:410.80',
+							'ICD9CM:410.81',
+							'ICD9CM:410.82',
+							'ICD9CM:410.9',
+							'ICD9CM:410.90',
+							'ICD9CM:410.91',
+							'ICD9CM:410.92',
+							'ICD9CM:412')
+
+	union
+    select o.PATIENT_NUM
+          ,'Obesity' as Outcome
+          ,o.START_DATE as Outcome_Date
+    from FellowsSample.S19.OBSERVATION_FACT o
+	where CONCEPT_CD IN ('ICD10CM:I21',
+							'ICD10CM:I21.0',
+							'ICD10CM:I21.01',
+							'ICD10CM:I21.02',
+							'ICD10CM:I21.09',
+							'ICD10CM:I21.1',
+							'ICD10CM:I21.11',
+							'ICD10CM:I21.19',
+							'ICD10CM:I21.2',
+							'ICD10CM:I21.21',
+							'ICD10CM:I21.29',
+							'ICD10CM:I21.3',
+							'ICD10CM:I21.4',
+							'ICD10CM:I21.9',
+							'ICD10CM:I21.A1',
+							'ICD10CM:I21.A9',
+							'ICD10CM:I22.0',
+							'ICD10CM:I22.1',
+							'ICD10CM:I22.2',
+							'ICD10CM:I22.8',
+							'ICD10CM:I22.9',
+							'ICD10CM:I23',
+							'ICD10CM:I23.1',
+							'ICD10CM:I23.2',
+							'ICD10CM:I23.3',
+							'ICD10CM:I23.5',
+							'ICD10CM:I23.6',
+							'ICD10CM:I23.7',
+							'ICD10CM:I23.8',
+							'ICD9CM:410',
+							'ICD9CM:410.00',
+							'ICD9CM:410.01',
+							'ICD9CM:410.02',
+							'ICD9CM:410.10',
+							'ICD9CM:410.11',
+							'ICD9CM:410.12',
+							'ICD9CM:410.20',
+							'ICD9CM:410.21',
+							'ICD9CM:410.22',
+							'ICD9CM:410.30',
+							'ICD9CM:410.31',
+							'ICD9CM:410.32',
+							'ICD9CM:410.40',
+							'ICD9CM:410.41',
+							'ICD9CM:410.42',
+							'ICD9CM:410.50',
+							'ICD9CM:410.52',
+							'ICD9CM:410.60',
+							'ICD9CM:410.62',
+							'ICD9CM:410.7',
+							'ICD9CM:410.70',
+							'ICD9CM:410.71',
+							'ICD9CM:410.72',
+							'ICD9CM:410.8',
+							'ICD9CM:410.80',
+							'ICD9CM:410.81',
+							'ICD9CM:410.82',
+							'ICD9CM:410.9',
+							'ICD9CM:410.90',
+							'ICD9CM:410.91',
+							'ICD9CM:410.92',
+							'ICD9CM:412')
+
+	union
+    select o.PATIENT_NUM
+          ,'Stroke' as Outcome
+          ,o.START_DATE as Outcome_Date
+    from FellowsSample.S19.OBSERVATION_FACT o
+	where CONCEPT_CD IN ('ICD10CM:I61'
+,'ICD10CM:I61.0'
+,'ICD10CM:I61.1'
+,'ICD10CM:I61.2'
+,'ICD10CM:I61.3'
+,'ICD10CM:I61.4'
+,'ICD10CM:I61.5'
+,'ICD10CM:I61.6'
+,'ICD10CM:I61.8'
+,'ICD10CM:I61.9'
+,'ICD10CM:I62.0'
+,'ICD10CM:I62.00'
+,'ICD10CM:I62.01'
+,'ICD10CM:I62.02'
+,'ICD10CM:I62.03'
+,'ICD10CM:I62.1'
+,'ICD10CM:I62.9'
+,'ICD9CM:431'
+,'ICD9CM:434.0'
+,'ICD9CM:434.00'
+,'ICD9CM:434.01'
+,'ICD9CM:434.1'
+,'ICD9CM:434.10'
+,'ICD9CM:434.11'
+,'ICD9CM:434.9'
+,'ICD9CM:434.90'
+,'ICD9CM:434.91')
+
+	union
+    select o.PATIENT_NUM
+          ,'T2D' as Outcome
+          ,o.START_DATE as Outcome_Date
+    from FellowsSample.S19.OBSERVATION_FACT o
+	where CONCEPT_CD IN ('ICD10CM:E08.42'
+,'ICD10CM:E10'
+,'ICD10CM:E10.10'
+,'ICD10CM:E10.11'
+,'ICD10CM:E10.2'
+,'ICD10CM:E10.21'
+,'ICD10CM:E10.22'
+,'ICD10CM:E10.29'
+,'ICD10CM:E10.311'
+,'ICD10CM:E10.319'
+,'ICD10CM:E10.3211'
+,'ICD10CM:E10.3212'
+,'ICD10CM:E10.3219'
+,'ICD10CM:E10.329'
+,'ICD10CM:E10.3293'
+,'ICD10CM:E10.3299'
+,'ICD10CM:E10.3312'
+,'ICD10CM:E10.3313'
+,'ICD10CM:E10.3391'
+,'ICD10CM:E10.3393'
+,'ICD10CM:E10.3399'
+,'ICD10CM:E10.3412'
+,'ICD10CM:E10.3413'
+,'ICD10CM:E10.3493'
+,'ICD10CM:E10.3499'
+,'ICD10CM:E10.351'
+,'ICD10CM:E10.3512'
+,'ICD10CM:E10.3513'
+,'ICD10CM:E10.3519'
+,'ICD10CM:E10.3522'
+,'ICD10CM:E10.3543'
+,'ICD10CM:E10.3551'
+,'ICD10CM:E10.3553'
+,'ICD10CM:E10.3559'
+,'ICD10CM:E10.3591'
+,'ICD10CM:E10.3593'
+,'ICD10CM:E10.3599'
+,'ICD10CM:E10.36'
+,'ICD10CM:E10.39'
+,'ICD10CM:E10.4'
+,'ICD10CM:E10.40'
+,'ICD10CM:E10.41'
+,'ICD10CM:E10.42'
+,'ICD10CM:E10.43'
+,'ICD10CM:E10.49'
+,'ICD10CM:E10.51'
+,'ICD10CM:E10.52'
+,'ICD10CM:E10.59'
+,'ICD10CM:E10.6'
+,'ICD10CM:E10.61'
+,'ICD10CM:E10.610'
+,'ICD10CM:E10.618'
+,'ICD10CM:E10.62'
+,'ICD10CM:E10.620'
+,'ICD10CM:E10.621'
+,'ICD10CM:E10.622'
+,'ICD10CM:E10.628'
+,'ICD10CM:E10.638'
+,'ICD10CM:E10.641'
+,'ICD10CM:E10.649'
+,'ICD10CM:E10.65'
+,'ICD10CM:E10.69'
+,'ICD10CM:E10.8'
+,'ICD10CM:E10.9'
+,'ICD10CM:E11'
+,'ICD10CM:E11.0'
+,'ICD10CM:E11.00'
+,'ICD10CM:E11.01'
+,'ICD10CM:E11.10'
+,'ICD10CM:E11.11'
+,'ICD10CM:E11.2'
+,'ICD10CM:E11.21'
+,'ICD10CM:E11.22'
+,'ICD10CM:E11.29'
+,'ICD10CM:E11.3'
+,'ICD10CM:E11.31'
+,'ICD10CM:E11.311'
+,'ICD10CM:E11.319'
+,'ICD10CM:E11.32'
+,'ICD10CM:E11.321'
+,'ICD10CM:E11.3211'
+,'ICD10CM:E11.3212'
+,'ICD10CM:E11.3213'
+,'ICD10CM:E11.3219'
+,'ICD10CM:E11.329'
+,'ICD10CM:E11.3291'
+,'ICD10CM:E11.3292'
+,'ICD10CM:E11.3293'
+,'ICD10CM:E11.3299'
+,'ICD10CM:E11.3311'
+,'ICD10CM:E11.3312'
+,'ICD10CM:E11.3313'
+,'ICD10CM:E11.3319'
+,'ICD10CM:E11.339'
+,'ICD10CM:E11.3391'
+,'ICD10CM:E11.3392'
+,'ICD10CM:E11.3393'
+,'ICD10CM:E11.3399'
+,'ICD10CM:E11.341'
+,'ICD10CM:E11.3411'
+,'ICD10CM:E11.3412'
+,'ICD10CM:E11.3413'
+,'ICD10CM:E11.3419'
+,'ICD10CM:E11.349'
+,'ICD10CM:E11.3491'
+,'ICD10CM:E11.3492'
+,'ICD10CM:E11.3493'
+,'ICD10CM:E11.3499'
+,'ICD10CM:E11.3511'
+,'ICD10CM:E11.3512'
+,'ICD10CM:E11.3513'
+,'ICD10CM:E11.3519'
+,'ICD10CM:E11.352'
+,'ICD10CM:E11.3522'
+,'ICD10CM:E11.3523'
+,'ICD10CM:E11.3529'
+,'ICD10CM:E11.3531'
+,'ICD10CM:E11.3532'
+,'ICD10CM:E11.3533'
+,'ICD10CM:E11.3541'
+,'ICD10CM:E11.3551'
+,'ICD10CM:E11.3552'
+,'ICD10CM:E11.3553'
+,'ICD10CM:E11.3559'
+,'ICD10CM:E11.359'
+,'ICD10CM:E11.3591'
+,'ICD10CM:E11.3592'
+,'ICD10CM:E11.3593'
+,'ICD10CM:E11.3599'
+,'ICD10CM:E11.36'
+,'ICD10CM:E11.37X2'
+,'ICD10CM:E11.37X9'
+,'ICD10CM:E11.39'
+,'ICD10CM:E11.4'
+,'ICD10CM:E11.40'
+,'ICD10CM:E11.41'
+,'ICD10CM:E11.42'
+,'ICD10CM:E11.43'
+,'ICD10CM:E11.44'
+,'ICD10CM:E11.49'
+,'ICD10CM:E11.5'
+,'ICD10CM:E11.51'
+,'ICD10CM:E11.52'
+,'ICD10CM:E11.59'
+,'ICD10CM:E11.6'
+,'ICD10CM:E11.61'
+,'ICD10CM:E11.610'
+,'ICD10CM:E11.618'
+,'ICD10CM:E11.62'
+,'ICD10CM:E11.620'
+,'ICD10CM:E11.621'
+,'ICD10CM:E11.622'
+,'ICD10CM:E11.628'
+,'ICD10CM:E11.630'
+,'ICD10CM:E11.638'
+,'ICD10CM:E11.64'
+,'ICD10CM:E11.641'
+,'ICD10CM:E11.649'
+,'ICD10CM:E11.65'
+,'ICD10CM:E11.69'
+,'ICD10CM:E11.8'
+,'ICD10CM:E11.9'
+,'ICD10CM:Z13.42'
+,'ICD9CM:250'
+,'ICD9CM:250.0'
+,'ICD9CM:250.00'
+,'ICD9CM:250.01'
+,'ICD9CM:250.02'
+,'ICD9CM:250.03'
+,'ICD9CM:250.1'
+,'ICD9CM:250.10'
+,'ICD9CM:250.11'
+,'ICD9CM:250.12'
+,'ICD9CM:250.13'
+,'ICD9CM:250.2'
+,'ICD9CM:250.20'
+,'ICD9CM:250.21'
+,'ICD9CM:250.22'
+,'ICD9CM:250.23'
+,'ICD9CM:250.30'
+,'ICD9CM:250.32'
+,'ICD9CM:250.4'
+,'ICD9CM:250.40'
+,'ICD9CM:250.41'
+,'ICD9CM:250.42'
+,'ICD9CM:250.43'
+,'ICD9CM:250.50'
+,'ICD9CM:250.51'
+,'ICD9CM:250.52'
+,'ICD9CM:250.53'
+,'ICD9CM:250.6'
+,'ICD9CM:250.60'
+,'ICD9CM:250.61'
+,'ICD9CM:250.62'
+,'ICD9CM:250.63'
+,'ICD9CM:250.7'
+,'ICD9CM:250.70'
+,'ICD9CM:250.71'
+,'ICD9CM:250.72'
+,'ICD9CM:250.73'
+,'ICD9CM:250.8'
+,'ICD9CM:250.80'
+,'ICD9CM:250.81'
+,'ICD9CM:250.82'
+,'ICD9CM:250.83'
+,'ICD9CM:250.9'
+,'ICD9CM:250.90'
+,'ICD9CM:250.91'
+,'ICD9CM:250.92'
+,'ICD9CM:250.93'
+,'ICD9CM:357.2'
+,'ICD9CM:362.0'
+,'ICD9CM:362.01'
+,'ICD9CM:362.02'
+,'ICD9CM:362.03'
+,'ICD9CM:362.04'
+,'ICD9CM:362.05'
+,'ICD9CM:362.06'
+,'ICD9CM:362.07')
+
+), mace_occur as (
+select p.PATIENT_NUM
+      ,datediff(day,p.INSOMNIA_CONTROL_INDEX_DATE,m.Outcome_Date) as DAYS_OSA_OUTCOME
+      ,case when datediff(day,p.INSOMNIA_CONTROL_INDEX_DATE,m.Outcome_Date)<=0 then concat(m.Outcome,'_BEF')
+            else concat(m.Outcome,'_AFT') end as MACE_BEF_AFT
+from S19.dbo.Pat_OSA_INS_Index_Included_Demo_SDOH p
+left join mace_event m on p.PATIENT_NUM = m.PATIENT_NUM 
+), mace_pivot as (
+select * from mace_occur
+pivot (min(DAYS_OSA_OUTCOME) for MACE_BEF_AFT
+		in (
+		[CAD_BEF],
+		[CAD_AFT],
+		[CerebroVD_BEF],
+		[CerebroVD_AFT],
+		[COPD_BEF],
+		[COPD_AFT],
+		[HF_BEF],
+		[HF_AFT],
+		[HTN_BEF],
+		[HTN_AFT],
+		[MI_BEF],
+		[MI_AFT],
+		[Obesity_BEF],
+		[Obesity_AFT],
+		[Stroke_BEF],
+		[Stroke_AFT],
+		[T2D_BEF],
+		[T2D_AFT]
+		)
+		) as pvt
+) 
+select p.PATIENT_NUM
+      ,p.INSOMNIA_CONTROL_INDEX_DATE
+      ,m.[CAD_BEF]
+      ,m.[CAD_AFT]
+      ,m.[CerebroVD_BEF]
+      ,m.[CerebroVD_AFT]
+	  ,m.[COPD_BEF]
+	  ,m.[COPD_AFT]
+	  ,m.[HF_BEF]
+	  ,m.[HF_AFT]
+	  ,m.[HTN_BEF]
+	  ,m.[HTN_AFT]
+	  ,m.[MI_BEF]
+	  ,m.[MI_AFT]
+	  ,m.[Obesity_BEF]
+	  ,m.[Obesity_AFT]
+	  ,m.[Stroke_BEF]
+	  ,m.[Stroke_AFT]
+	  ,m.[T2D_BEF]
+	  ,m.[T2D_AFT]
+      
+      --,NULLIF(least(NVL(m.MI_BEF, 999999),NVL(m.STROKE_BEF, 999999),NVL(m.HF_BEF, 999999),NVL(m.REVASC_BEF, 999999)),999999) as MACE_BEF
+      --,NULLIF(least(NVL(m.MI_AFT, 999999),NVL(m.STROKE_AFT, 999999),NVL(m.HF_AFT, 999999),NVL(m.REVASC_AFT, 999999)),999999) as MACE_AFT 
+      --,d.DEATH_DATE
+      --,datediff('day',p.OSA_DX1_DATE,d.DEATH_DATE) as DAYS_OSA_TO_DEATH
+into S19.dbo.INSOMNIA_OUTCOMES
+from S19.dbo.Pat_OSA_INS_Index_Included_Demo_SDOH p
+left join mace_pivot m on p.PATIENT_NUM = m.PATIENT_NUM
+;
+
+
+
+select top 100 * from S19.dbo.OSA_OUTCOMES;
+select top 100 * from S19.dbo.INSOMNIA_OUTCOMES; 
