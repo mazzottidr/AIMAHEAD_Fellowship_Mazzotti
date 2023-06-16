@@ -80,7 +80,7 @@ select distinct C_BASECODE from FellowsSample.common.I2B2
 where C_BASECODE LIKE 'SDH%'
 )
 select C_BASECODE as SDH
-into #ControlTable
+--into #ControlTable
 from SDH_concepts;
 
 select * from #ControlTable;
@@ -1001,3 +1001,99 @@ where CONCEPT_CD IN ('SDH:ADV0045',
 	'SDH:ADV0259',
 	'SDH:ADV0260',
 	'SDH:ADV0267') and c.C_FULLNAME LIKE '%\Screened\%'
+
+
+
+------- On the Positive Screen Table, join included patients and calculate time to screening date
+-- OSA
+with sdoh_event as (
+select 
+	o.PATIENT_NUM
+	,o.QUANTITY_NUM as SDOH_STATUS
+	,o.START_DATE as SDOH_Date
+	,c.C_NAME as SDOH_NAME
+	,c.C_FULLNAME as SDOH_FULLNAME
+	,o.CONCEPT_CD as SDOH_CONCEPT_CD
+from FellowsSample.S19.OBSERVATION_FACT o
+left join FellowsSample.common.I2B2 c on o.CONCEPT_CD = c.C_BASECODE
+where CONCEPT_CD LIKE 'SDH%' and c.C_FULLNAME LIKE '%\Positive screen\%'
+),
+sdoh_occur as (
+select p.PATIENT_NUM
+      ,datediff(day,p.OSA_CONTROL_INDEX_DATE,se.SDOH_Date) as DAYS_OSA_SDOH
+	  ,SDOH_CONCEPT_CD
+	  ,SDOH_NAME
+	  ,SDOH_FULLNAME
+	  ,SDOH_STATUS
+from S19.dbo.Pat_OSA_INS_Index_Included_Demo_SDOH p
+left join sdoh_event se on p.PATIENT_NUM = se.PATIENT_NUM 
+),
+--select top 100 * from sdoh_occur;
+sdoh_all as (
+select 
+	PATIENT_NUM,
+	min(abs(DAYS_OSA_SDOH)) as MIN_DAYS_OSA_SDOH
+from sdoh_occur
+group by PATIENT_NUM
+), sdoh_enc as (
+select
+	so.PATIENT_NUM,
+	sa.MIN_DAYS_OSA_SDOH,
+	so.SDOH_CONCEPT_CD,
+	so.SDOH_NAME,
+	so.SDOH_STATUS
+from sdoh_all sa
+left join sdoh_occur so on sa.PATIENT_NUM = so.PATIENT_NUM
+where sa.MIN_DAYS_OSA_SDOH <= 365 -- include only encounter level SDH that were assessed within 1 year of OSA diagnosis
+)
+select *
+into S19.dbo.EncLevel_SDOH_OSA_long
+from sdoh_enc;
+
+-- INSOMNIA
+with sdoh_event as (
+select 
+	o.PATIENT_NUM
+	,o.QUANTITY_NUM as SDOH_STATUS
+	,o.START_DATE as SDOH_Date
+	,c.C_NAME as SDOH_NAME
+	,c.C_FULLNAME as SDOH_FULLNAME
+	,o.CONCEPT_CD as SDOH_CONCEPT_CD
+from FellowsSample.S19.OBSERVATION_FACT o
+left join FellowsSample.common.I2B2 c on o.CONCEPT_CD = c.C_BASECODE
+where CONCEPT_CD LIKE 'SDH%' and c.C_FULLNAME LIKE '%\Positive screen\%'
+),
+sdoh_occur as (
+select p.PATIENT_NUM
+      ,datediff(day,p.INSOMNIA_CONTROL_INDEX_DATE,se.SDOH_Date) as DAYS_INSOMNIA_SDOH
+	  ,SDOH_CONCEPT_CD
+	  ,SDOH_NAME
+	  ,SDOH_FULLNAME
+	  ,SDOH_STATUS
+from S19.dbo.Pat_OSA_INS_Index_Included_Demo_SDOH p
+left join sdoh_event se on p.PATIENT_NUM = se.PATIENT_NUM 
+),
+--select top 100 * from sdoh_occur;
+sdoh_all as (
+select 
+	PATIENT_NUM,
+	min(abs(DAYS_INSOMNIA_SDOH)) as MIN_DAYS_INSOMNIA_SDOH
+from sdoh_occur
+group by PATIENT_NUM
+), sdoh_enc as (
+select
+	so.PATIENT_NUM,
+	sa.MIN_DAYS_INSOMNIA_SDOH,
+	so.SDOH_CONCEPT_CD,
+	so.SDOH_NAME,
+	so.SDOH_STATUS
+from sdoh_all sa
+left join sdoh_occur so on sa.PATIENT_NUM = so.PATIENT_NUM
+where sa.MIN_DAYS_INSOMNIA_SDOH <= 365 -- include only encounter level SDH that were assessed within 1 year of OSA diagnosis
+)
+select *
+into S19.dbo.EncLevel_SDOH_INSOMNIA_long
+from sdoh_enc;
+
+
+select top 100 * from  S19.dbo.Pat_OSA_INS_Index_Included_Demo_SDOH;
