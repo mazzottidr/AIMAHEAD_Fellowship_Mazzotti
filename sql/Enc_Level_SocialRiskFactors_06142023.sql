@@ -28,10 +28,13 @@ left join sdoh_event se on p.PATIENT_NUM = se.PATIENT_NUM
 sdoh_all as (
 select 
 	PATIENT_NUM,
+	SDOH_CONCEPT_CD,
 	min(abs(DAYS_OSA_SDOH)) as MIN_DAYS_OSA_SDOH
 from sdoh_occur
-group by PATIENT_NUM
-), sdoh_enc as (
+group by PATIENT_NUM, SDOH_CONCEPT_CD
+),
+--select top 100 * from sdoh_all;
+sdoh_enc as (
 select
 	so.PATIENT_NUM,
 	sa.MIN_DAYS_OSA_SDOH,
@@ -49,7 +52,7 @@ from sdoh_enc;
 
 --drop table S19.dbo.EncLevel_SDOH_OSA_long;
 select top 100 * from S19.dbo.EncLevel_SDOH_OSA_long;
-select count(*) from S19.dbo.EncLevel_SDOH_OSA_long; -- 1,072,753 SDH measurements
+select count(*) from S19.dbo.EncLevel_SDOH_OSA_long; -- 1,334,136 SDH measurements
 select count(distinct PATIENT_NUM) from S19.dbo.EncLevel_SDOH_OSA_long;  -- 101,567 patients
 
 -- INSOMNIA
@@ -79,9 +82,10 @@ left join sdoh_event se on p.PATIENT_NUM = se.PATIENT_NUM
 sdoh_all as (
 select 
 	PATIENT_NUM,
+	SDOH_CONCEPT_CD,
 	min(abs(DAYS_INSOMNIA_SDOH)) as MIN_DAYS_INSOMNIA_SDOH
 from sdoh_occur
-group by PATIENT_NUM
+group by PATIENT_NUM, SDOH_CONCEPT_CD
 ), sdoh_enc as (
 select
 	so.PATIENT_NUM,
@@ -91,7 +95,7 @@ select
 	so.SDOH_STATUS as SDOH_STATUS_AT_INSOMNIA
 from sdoh_all sa
 left join sdoh_occur so on sa.PATIENT_NUM = so.PATIENT_NUM
-where sa.MIN_DAYS_INSOMNIA_SDOH <= 365 -- include only encounter level SDH that were assessed within 1 year of OSA diagnosis
+where sa.MIN_DAYS_INSOMNIA_SDOH <= 365 -- include only encounter level SDH that were assessed within 1 year of Insomnia diagnosis
 )
 select distinct *
 into S19.dbo.EncLevel_SDOH_INSOMNIA_long
@@ -99,7 +103,7 @@ from sdoh_enc;
 
 --drop table S19.dbo.EncLevel_SDOH_INSOMNIA_long;
 select top 100 * from S19.dbo.EncLevel_SDOH_INSOMNIA_long;
-select count(*) from S19.dbo.EncLevel_SDOH_INSOMNIA_long;  -- 1,106,653 SDH measurements
+select count(*) from S19.dbo.EncLevel_SDOH_INSOMNIA_long;  -- 1,377,062 SDH measurements
 select count(distinct PATIENT_NUM) from S19.dbo.EncLevel_SDOH_INSOMNIA_long;  -- 104,448 patients
 
 
