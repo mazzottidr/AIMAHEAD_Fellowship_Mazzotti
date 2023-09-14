@@ -1800,4 +1800,8 @@ order by earliest_Stroke_code;
 
 -- T2D
 select distinct earliest_T2D_code from S19.dbo.T2D_CompPheno
+<<<<<<< HEAD
 order by earliest_T2D_code;
+=======
+order by earliest_T2D_code;
+>>>>>>> 2e575df379a234a888b49a93caa001310bdb4225

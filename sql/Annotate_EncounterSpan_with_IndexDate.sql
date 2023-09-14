@@ -108,4 +108,8 @@ select
 	datediff(day, INSOMNIA_CONTROL_INDEX_DATE, latest_encounter_date) as days_insomnia_index_to_lastenc
 into S19.dbo.INSOMNIA_COMPLETE_5YR_COHORT
 from S19.dbo.Pat_OSA_INS_Index_Included
+<<<<<<< HEAD
 where has_1yr_before_insomnia = 1 and has_5yr_from_insomnia_index = 1;
+=======
+where has_1yr_before_insomnia = 1 and has_5yr_from_insomnia_index = 1;
+>>>>>>> 2e575df379a234a888b49a93caa001310bdb4225

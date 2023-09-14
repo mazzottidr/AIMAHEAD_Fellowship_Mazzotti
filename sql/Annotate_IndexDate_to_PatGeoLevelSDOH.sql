@@ -29,4 +29,8 @@ select
 	pdim.ACS_pctPoverty100
 into S19.dbo.Pat_OSA_INS_Index_Included_Demo_SDOH
 from S19.dbo.Pat_OSA_INS_Index_Included pin
+<<<<<<< HEAD
 left join S19.dbo.PATIENT_DIMENSION_Z pdim on pin.PATIENT_NUM = pdim.PATIENT_NUM;
+=======
+left join S19.dbo.PATIENT_DIMENSION_Z pdim on pin.PATIENT_NUM = pdim.PATIENT_NUM;
+>>>>>>> 2e575df379a234a888b49a93caa001310bdb4225
